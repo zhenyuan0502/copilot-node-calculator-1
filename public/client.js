@@ -16,8 +16,9 @@ var operand1 = 0;
 var operand2 = 0;
 var operation = null;
 
-function calculate(operand1, operation, operand2 = null) {
+function calculate(operand1, operand2, operation) {
     var uri = location.origin + "/arithmetic";
+
     // TODO: Add operator
     switch (operation) {
         case '+':
@@ -38,10 +39,8 @@ function calculate(operand1, operation, operand2 = null) {
     }
 
     uri += "&operand1=" + encodeURIComponent(operand1);
-    if (operand2 != null)
-        uri += "&operand2=" + encodeURIComponent(operand2);
+    uri += "&operand2=" + encodeURIComponent(operand2);
 
-    console.log("uri " + uri);
     setLoading(true);
 
     var http = new XMLHttpRequest();
@@ -53,8 +52,7 @@ function calculate(operand1, operation, operand2 = null) {
             var response = JSON.parse(http.responseText);
             setValue(response.result);
         } else {
-            var errorMessage = http.responseText;
-            setError(errorMessage);
+            setError();
         }
     };
     http.send(null);
@@ -116,33 +114,22 @@ function operationPressed(op) {
     operand1 = getValue();
     operation = op;
     state = states.operator;
-    document.getElementById("operatorSpan").innerText = op;
 }
 
 function equalPressed() {
-    if (state < states.operand1) {
+    if (state < states.operand2) {
         state = states.complete;
         return;
     }
-    // log to main thread state
-    console.log("state " + state);
 
-    if (state == states.operator) {
-        operand1 = getValue();
-        state = states.complete;
-    } else if (state == states.operand2) {
+    if (state == states.operand2) {
         operand2 = getValue();
         state = states.complete;
     } else if (state == states.complete) {
         operand1 = getValue();
     }
 
-    if (operand2) {
-        calculate(operand1, operation, operand2);
-    } else {
-        console.log("calculate " + operand1 + " " + operation);
-        calculate(operand1, operation);
-    }
+    calculate(operand1, operand2, operation);
 }
 
 // TODO: Add key press logics
@@ -194,8 +181,8 @@ function setValue(n) {
     document.getElementById("result").innerHTML = html;
 }
 
-function setError(errorMessage) {
-    document.getElementById("result").innerHTML = "ERROR: " + errorMessage;
+function setError(n) {
+    document.getElementById("result").innerHTML = "ERROR";
 }
 
 function setLoading(loading) {

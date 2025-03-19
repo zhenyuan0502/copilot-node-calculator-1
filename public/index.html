@@ -6,20 +6,14 @@
     <script src="client.js"></script>
   </head>
   <body onLoad="setValue(0)">
-    <div class="container" >
-      
+    <div class="container">
       <div id="results">
-        <div id="operator">
-          <span>Operation: </span><span id="operatorSpan"></span>
-        </div>
-        <div id="result">
-          <span class="digit0">0</span>
-        </div>
+        <div id="result"><span class="digit0">0</span></div>
       </div>
 
       <div id="loading" style="visibility:hidden"></div>
 
-      <div class="box" >
+      <div class="box">
         <div class="calculator">
           <div class="calculator-buttons">
             <button class="btn span-2"></button>
@@ -47,6 +41,7 @@
             <button class="btn" onClick="equalPressed()">=</button>
 
             <!-- TODO: Buttons -->
+
           </div>
         </div>
       </div>
